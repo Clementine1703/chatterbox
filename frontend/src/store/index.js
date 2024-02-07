@@ -46,7 +46,7 @@ export default createStore({
             ]
         },
         protocol: 'http://',
-        base_url: 'localhost:8000',
+        base_url: '192.168.1.104:8000',
     },
     getters: {
         GET_PROTOCOL(state) {
@@ -445,7 +445,7 @@ export default createStore({
                     url: `${protocol}${base_url}/auth/users/`,
                     mode: 'cors',
                     data: {
-                        'username': userdata.email,
+                        'username': userdata.login,
                         'password': userdata.password,
                         'email': userdata.email,
                     }

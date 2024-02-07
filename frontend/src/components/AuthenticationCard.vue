@@ -7,14 +7,26 @@
                 </q-card-section>
 
                 <q-card-section>
+                  <q-form @submit.prevent="sign_in(login, password)">
                     <q-input bg-color="white" standout outlined bottom-slots v-model="login" label="Логин/почта">
                     </q-input>
                     <q-input bg-color="white" standout outlined bottom-slots v-model="password" label="Пароль" type="password">
                     </q-input>
                     <div  class="row justify-between">
-                        <q-btn style="opacity: 0.75;" color="grey-1" text-color="black" label="Зарегистрироваться" :to="{ name: 'registration'}" />
-                        <q-btn style="opacity: 0.75;" color="grey-1" text-color="black" label="Войти" />
+                        <q-btn 
+                          style="opacity: 0.75;" 
+                          color="grey-1" 
+                          text-color="black" 
+                          label="Зарегистрироваться" 
+                          :to="{ name: 'registration'}" />
+                        <q-btn 
+                          style="opacity: 0.75;" 
+                          color="grey-1" 
+                          text-color="black" 
+                          label="Войти"
+                          type="submit" />
                     </div>
+                  </q-form>
                 </q-card-section>
         </q-card>
     </q-page>
@@ -41,6 +53,15 @@
     methods: {
       ...mapActions(['AUTHORIZE_THE_USER', 'REDIRECT_TO_THE_PAGE', 'GET_USER_AUTHORIZATION_DATA_FROM_COOKIES', 'SET_WEBSOCKET_INDICATOR']),
       
+      enable_preloader() {
+        this.preloader = true;
+      },
+
+      disable_preloader() {
+        this.preloader = false;
+      },
+
+
       async sign_in(login, password, remember_me) {
         this.enable_preloader()
         this.AUTHORIZE_THE_USER({ email: login, password: password, remember_me: remember_me }).then((result) => {
@@ -49,6 +70,7 @@
         })
           .catch((error) => {
             this.status_info = error;
+            console.log(this.status_info)
           })
           .finally(() => {
             this.disable_preloader()
