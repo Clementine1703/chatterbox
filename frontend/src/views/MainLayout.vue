@@ -151,5 +151,4 @@ export default defineComponent ({
 .header, .footer{
   background-color: $primary;
 }
-
 </style>

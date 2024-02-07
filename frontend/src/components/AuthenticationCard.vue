@@ -18,10 +18,11 @@
                 </q-card-section>
         </q-card>
     </q-page>
-  </template>
+</template>
   
   <script>
   import { defineComponent } from 'vue'
+  import { mapActions, mapGetters } from "vuex";
   
   export default defineComponent({
     name: 'AuthenticationCard',
@@ -29,8 +30,43 @@
       return {
         login: '',
         password: '',
+        remember_me: false,
+        status_info: '',
+        preloader: false,
       }
     },
+    computed: {
+      ...mapGetters(['GET_AUTH_TOKEN']),
+    },
+    methods: {
+      ...mapActions(['AUTHORIZE_THE_USER', 'REDIRECT_TO_THE_PAGE', 'GET_USER_AUTHORIZATION_DATA_FROM_COOKIES', 'SET_WEBSOCKET_INDICATOR']),
+      
+      async sign_in(login, password, remember_me) {
+        this.enable_preloader()
+        this.AUTHORIZE_THE_USER({ email: login, password: password, remember_me: remember_me }).then((result) => {
+          this.password = '';
+          this.status_info = result;
+        })
+          .catch((error) => {
+            this.status_info = error;
+          })
+          .finally(() => {
+            this.disable_preloader()
+          })
+      },
+    },
+
+    mounted() {
+      if (this.GET_AUTH_TOKEN) {
+        this.REDIRECT_TO_THE_PAGE('main')
+      }
+      try {
+        this.email, this.password = this.GET_USER_AUTHORIZATION_DATA_FROM_COOKIES();
+      }
+      catch {
+        return 0;
+      }
+    }
   })
   </script>
 

@@ -38,7 +38,7 @@ const routes = [
       children: [
         { path: 'auth', name: 'authentication', component: AuthenticationCard },
         { path: 'reg', name: 'registration', component: RegistrationCard },
-        // { path: '/', redirect: 'auth' },
+        { path: '/', redirect: 'auth' },
       ]
     },
 ]

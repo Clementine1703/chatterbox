@@ -1,7 +1,16 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from '@/router'
+import vuex from '@/store'
 import { Quasar } from 'quasar'
 import quasarUserOptions from './quasar-user-options'
+import VueCookies from 'vue-cookies'
 
-createApp(App).use(Quasar, quasarUserOptions).use(router).mount('#app')
+
+const app = createApp(App)
+app
+    .use(Quasar, quasarUserOptions)
+    .use(router)
+    .use(vuex)
+    .use(VueCookies)
+    .mount('#app')
