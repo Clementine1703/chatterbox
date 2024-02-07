@@ -31,12 +31,15 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'drf_spectacular',
+    'main.apps.MainConfig',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +69,20 @@ TEMPLATES = [
         },
     },
 ]
+
+AUTH_USER_MODEL = 'main.CustomUser'
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ChatterBOX API',
+    'DESCRIPTION': 'ChatterBOX API swagger',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # OTHER SETTINGS
+}
 
 WSGI_APPLICATION = 'backend.wsgi.application'
 
