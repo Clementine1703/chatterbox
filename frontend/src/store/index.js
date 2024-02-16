@@ -1,12 +1,13 @@
 import { createStore } from "vuex";
-import { hasProperty, isDefined } from './helpers/index.js'
-// import axios from "axios";
-// import router from '../router';
-// import cookie from 'vue-cookies';
+import axios from "axios";
+import router from "@/router";
+import { Notify } from 'quasar';
+
 
 
 export default createStore({
     state: {
+        base_url: 'http://127.0.0.1:8000',
         auth: {
             isAuthenticated: false,
             user: {
@@ -17,7 +18,8 @@ export default createStore({
                 refresh: null,
             },
             error: null,
-        }
+        },
+        router: router,
     },
 
     getters: {
@@ -45,20 +47,39 @@ export default createStore({
         },
     },
     actions: {
-        login: ({ commit }, payload) => {
-            // Проверяем, что payload и payload.token существуют и не null
-            if (isDefined(payload) && hasProperty(payload, 'token')) {
-              const token = payload.token;
-              // Проверяем, что access и refresh токены существуют и не null
-              if (isDefined(token) && hasProperty(token, 'access') && hasProperty(token, 'refresh')) {
-                commit('SET_ACCESS_TOKEN', token.access);
-                commit('SET_REFRESH_TOKEN', token.refresh);
-              } else {
-                console.error('Один из токенов не существует в объекте payload.token');
-              }
-            } else {
-              console.error('Объект payload не содержит свойство token');
-            }
-          }
+        login: ({ commit, state, dispatch  }, loginData) => {
+                axios.post(`${state.base_url}/auth/token/create/`, {
+                    username: loginData.username,
+                    password: loginData.password,
+                })
+                .then((response)=>{
+                    if (response.status === 200){
+                        console.log(response)
+                        // Проверяем, что payload и payload.token существуют и не null
+                        const token = response.data;
+                        // Проверяем, что access и refresh токены существуют и не null
+                        commit('SET_ACCESS_TOKEN', token.access);
+                        commit('SET_REFRESH_TOKEN', token.refresh);
+                        state.router.push({ name: 'main' })
+                        dispatch('showNotification', {message: 'Вы успешно авторизованы!', color: 'positive'})
+                    }
+                })
+                .catch((error)=>{
+                    console.error(`Попытка авторизации окончилась ошибкой:' ${error}`)
+                    dispatch('showNotification',{message: 'Что-то пошло не так', color: 'negative'})
+                })
+        },
+
+        // eslint-disable-next-line
+        showNotification({}, {message, color}){
+            
+
+            Notify.create({
+                message,
+                color,
+                position: 'bottom',
+                actions: [{ icon: 'close', color: 'white', round: true}]
+            });
+        }
     }
 })

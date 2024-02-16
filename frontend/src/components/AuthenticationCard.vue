@@ -7,8 +7,8 @@
                 </q-card-section>
 
                 <q-card-section>
-                  <q-form>
-                    <q-input bg-color="white" standout outlined bottom-slots v-model="login" label="Логин/почта">
+                  <q-form @submit.prevent="loginUser()">
+                    <q-input bg-color="white" standout outlined bottom-slots v-model="username" label="Логин/почта">
                     </q-input>
                     <q-input bg-color="white" standout outlined bottom-slots v-model="password" label="Пароль" type="password">
                     </q-input>
@@ -34,18 +34,24 @@
   
   <script>
   import { defineComponent } from 'vue'
-  // import { mapActions, mapGetters } from "vuex";
+  import { mapActions } from "vuex";
   
   export default defineComponent({
     name: 'AuthenticationCard',
     data() {
       return {
-        form:{
-          login: '',
-          password: '',
-          remember_me: false,
-        },
-        preloader: false,
+        username: '',
+        password: '',
+        remember_me: false,
+      }
+    },
+    methods: {
+      ...mapActions({
+        login: 'login',
+        showNotification: 'showNotification',
+      }),
+      loginUser(){
+        this.login({username: this.username, password: this.password})
       }
     },
   })

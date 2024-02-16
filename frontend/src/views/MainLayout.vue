@@ -93,8 +93,14 @@ const menuList = [
     icon: 'help',
     label: 'FAQ',
     routeName: 'faq',
+    separator: true
+  },
+  {
+    icon: 'meeting_room',
+    label: 'Выйти',
+    routeName: 'signout',
     separator: false
-  }
+  },
 ]
 
 export default defineComponent ({
