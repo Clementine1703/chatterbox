@@ -51,6 +51,7 @@
 <script>
 import { ref } from 'vue'
 import { defineComponent } from 'vue'
+import { mapGetters } from 'vuex'
 
 const menuList = [
   {
@@ -98,8 +99,8 @@ const menuList = [
   {
     icon: 'meeting_room',
     label: 'Выйти',
-    routeName: 'signout',
-    separator: false
+    routeName: 'logout',
+    separator: false,
   },
 ]
 
@@ -110,19 +111,26 @@ export default defineComponent ({
         activeMenuItemRouteName: '',
       }
     },
+    computed:{
+      ...mapGetters({
+        userAuthenticated: 'account/getUserAuthenticatedFlag',
+      })
+    },
     methods: {
       calculateActiveMenuItem(){
         this.activeMenuItemRouteName = this.$route.name
+        console.log(this.userAuthenticated)
       },
 
       changeActiveMenuItem(menuItem){
-        console.log(menuItem.routeName)
         this.activeMenuItemRouteName = menuItem.routeName
-      }
+      },
     },
     mounted(){
       this.calculateActiveMenuItem()
-      console.log('aboba')
+      if (!this.userAuthenticated){
+        this.$router.push({ name: 'authentication' })
+      }
     },
     setup() {
         return {

@@ -13,6 +13,8 @@ import SiteSettings from './../components/SiteSettings.vue'
 import FrequentlyAskedQuestions from './../components/FrequentlyAskedQuestions.vue'
 import AuthenticationCard from './../components/AuthenticationCard.vue'
 import RegistrationCard from './../components/RegistrationCard.vue'
+import UserLogout from './../components/UserLogout.vue'
+
 
 
 const routes = [
@@ -29,6 +31,8 @@ const routes = [
         { path: 'communities', name: 'communities', component: UserCommunities },
         { path: 'settings', name: 'settings', component: SiteSettings },
         { path: 'faq', name: 'faq', component: FrequentlyAskedQuestions },
+        { path: 'logout', name: 'logout', component: UserLogout },
+
       ]
     },
     {

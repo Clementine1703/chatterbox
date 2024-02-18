@@ -34,7 +34,7 @@
   
   <script>
   import { defineComponent } from 'vue'
-  import { mapActions } from "vuex";
+  import { mapActions, mapGetters } from "vuex";
   
   export default defineComponent({
     name: 'AuthenticationCard',
@@ -45,15 +45,26 @@
         remember_me: false,
       }
     },
+    computed:{
+      ...mapGetters({
+        userAuthenticated: 'account/getUserAuthenticatedFlag',
+      })
+    },
     methods: {
-      ...mapActions({
-        login: 'login',
-        showNotification: 'showNotification',
+      ...mapActions( {
+        login: 'account/login',
       }),
       loginUser(){
         this.login({username: this.username, password: this.password})
       }
     },
+    mounted(){
+      console.log(this.userAuthenticated)
+      console.log(this.$store)
+      if (this.userAuthenticated){
+        this.$router.push({ name: 'main' })
+      }
+    }
   })
   </script>
 
