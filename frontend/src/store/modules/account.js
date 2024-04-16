@@ -87,6 +87,65 @@ export default {
 
         },
 
+        authenticationCheck({ getters, dispatch }) {
+            axios.post(`${baseUrl}/auth/token/verify/`, {
+                token: getters.getAccessToken
+            }, 
+            {
+                headers: {
+                    Authorization: `Bearer ${getters.getAccessToken}`
+                },
+            })
+            .then((response)=>{
+                if (response.status === 200){
+                    console.log(response)
+                    dispatch('notifications/callNotification', {
+                        message: 'Вы все еще авторизованы.',
+                        color: 'positive',
+                    }, {root: true})
+                }
+            })
+            .catch((error)=>{
+                dispatch('notifications/callNotification', {
+                    message: 'Access token устарел, пробуем обновить.',
+                    color: 'negative',
+                }, {root: true})
+                console.log(`access_token::: ${error}`)
+                dispatch('refreshAccessToken')
+            })
+        },
+
+        refreshAccessToken({ commit, getters, dispatch }) {
+            axios.post(`${baseUrl}/auth/token/refresh/`, 
+            { 
+                refresh: getters.getRefreshToken 
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${getters.getAccessToken}`
+                }
+            })
+            .then((response)=>{
+
+                let access_token = response.data.access
+                commit('SET_ACCESS_TOKEN', access_token)
+
+                dispatch('notifications/callNotification', {
+                    message: 'Access token успешно обновлен.',
+                    color: 'positive',
+                }, {root: true})
+
+            })
+            .catch((error)=>{
+                dispatch('notifications/callNotification', {
+                    message: 'Access token не обновлен, подробности в консоли.',
+                    color: 'negative',
+                }, {root: true})
+                console.log(`refresh_token::: ${error}`)
+                dispatch('logout')
+            })
+        },
+
         setAuthorizationCookies({ getters }) {
             const cookies = useCookies().cookies
             cookies.set('token_access', getters.getAccessToken)
