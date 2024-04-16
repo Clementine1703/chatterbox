@@ -8,7 +8,12 @@ import axios from 'axios'
 import VueAxios from 'vue-axios'
 import VueCookies from 'vue-cookies'
 
+import { errorHandler } from './utils/errorHandler'
+
 const app = createApp(App)
+
+app.config.errorHandler = errorHandler
+
 app
     .use(Quasar, quasarUserOptions)
     .use(router)

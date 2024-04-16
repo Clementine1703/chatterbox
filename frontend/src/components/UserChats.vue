@@ -190,9 +190,13 @@
 
 <script>
 import { defineComponent } from 'vue'
+import { AuthConfirmationError } from '@/errors';
 
 export default defineComponent({
-  name: 'UserChats'
+  name: 'UserChats',
+  mounted(){
+    throw AuthConfirmationError
+  }
 })
 </script>
 
