@@ -1,44 +1,39 @@
 <template>
-    <q-page class="flex flex-center">
-        <div style="width: 100%; max-width: 800px;">
+    <q-page class="flex active-chat">
+      <div class=" active-chat__wrapper q-pa-md row ">
+    <div style="width: 100%">
+      <q-chat-message
+        label="Sunday, 19th"
+      />
+
       <q-chat-message
         name="me"
-        avatar="https://cdn.quasar.dev/img/avatar3.jpg"
+        avatar="https://cdn.quasar.dev/img/avatar4.jpg"
         :text="['hey, how are you?']"
-        stamp="7 minutes ago"
         sent
-        bg-color="gray"
+        stamp="7 minutes ago"
       />
       <q-chat-message
         name="Jane"
-        avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-        :text="[
-          'doing fine, how r you?',
-          'I just feel like typing a really, really, REALLY long message to annoy you...'
-        ]"
-        size="6"
+        avatar="https://cdn.quasar.dev/img/avatar3.jpg"
+        :text="['doing fine, how r you?']"
         stamp="4 minutes ago"
-        text-color="white"
-        bg-color="primary"
-      />
-      <q-chat-message
-        name="Jane"
-        avatar="https://cdn.quasar.dev/img/avatar5.jpg"
-        :text="['Did it work?']"
-        stamp="1 minutes ago"
-        size="8"
-        text-color="white"
-        bg-color="primary"
       />
     </div>
+  </div>
     </q-page>
   </template>
   
-  <script>
-  import { defineComponent } from 'vue'
-  
-  export default defineComponent({
-    name: 'UserChatActive'
-  })
-  </script>
+  <!-- <script setup>
+  </script> -->
+
+<style scoped>
+  .active-chat{
+    width: 100%;
+  }
+
+  .active-chat__wrapper{
+    width: 100%;
+  }
+</style>
   

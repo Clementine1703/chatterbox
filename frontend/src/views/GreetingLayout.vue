@@ -8,28 +8,8 @@
     </q-layout>
 </template>
 
-<script>
-// import { ref } from 'vue'
-import { defineComponent } from 'vue'
-
-
-
-
-export default defineComponent ({
-    name: "GreetingLayout",
-    data() {
-      return {
-        login: '',
-        password: '',
-        email: '',
-      }
-    },
-    mounted(){
-        console.log(this)
-    },
-
-})
-</script>
+<!-- <script setup>
+</script> -->
 
 <style lang="scss" scoped>
 

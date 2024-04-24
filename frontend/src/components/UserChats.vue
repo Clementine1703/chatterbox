@@ -169,28 +169,46 @@
     </q-list>
   </div>
       </div>
-      <div class="active-chat"></div>
+      <UserChatActive></UserChatActive>
     </div>
   </q-page>
 </template>
 
-<script>
+<script setup>
+import UserChatActive from '@/components/UserChatActive.vue'
+import { onMounted } from 'vue'
+import { useStore } from 'vuex'
+
+
+const store = useStore()
+
+function authenticationCheck(){
+  store.dispatch('account/authenticationCheck')
+}
+
+onMounted(()=>{
+  authenticationCheck()
+})
+</script>
+
+<!-- <script>
 import { defineComponent } from 'vue'
+import UserChatActive from '@/components/UserChatActive.vue'
 import { mapActions } from 'vuex'
+import store from '@/store'
 // import { AuthConfirmationError } from '@/errors';
 
 export default defineComponent({
   name: 'UserChats',
+  components: { UserChatActive },
   methods: {
-    ...mapActions({
-      authenticationCheck: 'account/authenticationCheck'
-    })
+
   },
   mounted(){
     this.authenticationCheck()
   }
 })
-</script>
+</script> -->
 
 <style scoped lang="scss">
   .wrapper{
@@ -202,14 +220,13 @@ export default defineComponent({
 
   .chat-list{
     width: 30%;
-    height: 800px;
+    height: 600px;
     overflow-y: auto;
   }
 
   .active-chat{
     width: 70%;
-    height: 800px;
-    background-color: red;
+    height: 600px;
   }
   
   .chat-list__item{
@@ -218,6 +235,6 @@ export default defineComponent({
   }
 
   .chat-list__item:hover{
-    background-color: red;
+    background-color: rgb(230, 226, 226);
   }
 </style>

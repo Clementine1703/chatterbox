@@ -8,11 +8,9 @@
 
 <script>
 
+
 export default {
   name: 'LayoutDefault',
-  mounted(){
-    console.log(this.$router)
-  },
 }
 </script>
 

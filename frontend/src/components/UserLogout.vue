@@ -4,20 +4,17 @@
   </q-page>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
-import { mapActions } from 'vuex'
+<script setup>
+import { onMounted } from 'vue'
+import { useStore } from 'vuex'
 
+const store = useStore()
 
-export default defineComponent({
-  name: 'UserLogout',
-  methods:{
-    ...mapActions({
-      logout: 'account/logout',
-    })
-  },
-  mounted(){
-    this.logout()
-  }
+function logout(){
+  store.dispatch('account/logout')
+}
+
+onMounted(()=>{
+  logout()
 })
 </script>

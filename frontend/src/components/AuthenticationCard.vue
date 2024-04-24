@@ -31,10 +31,37 @@
         </q-card>
     </q-page>
 </template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRouter } from 'vue-router'
+
+
+const store = useStore()
+const router = useRouter()
+
+let username = ref('')
+let password = ref('')
+// let remember_me = ref(false)
+let userAuthenticated = computed(() => store.getters['account/getUserAuthenticatedFlag'])
+
+function loginUser(){
+  store.dispatch('account/login', {username: username.value, password: password.value})
+}
+
+onMounted(()=>{
+  if (userAuthenticated.value){
+    router.push({ name: 'main' })
+  }
+})
+
+</script>
   
-  <script>
+  <!-- <script>
   import { defineComponent } from 'vue'
-  import { mapActions, mapGetters } from "vuex";
+  import { mapActions, mapGetters} from "vuex";
+
   
   export default defineComponent({
     name: 'AuthenticationCard',
@@ -54,19 +81,18 @@
       ...mapActions( {
         login: 'account/login',
       }),
+
       loginUser(){
         this.login({username: this.username, password: this.password})
       }
     },
     mounted(){
-      console.log(this.userAuthenticated)
-      console.log(this.$store)
       if (this.userAuthenticated){
         this.$router.push({ name: 'main' })
       }
     }
   })
-  </script>
+  </script> -->
 
 <style scoped lang="scss">
 .reg-card{

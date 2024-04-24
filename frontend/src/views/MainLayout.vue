@@ -48,10 +48,106 @@
     </q-layout>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useStore } from 'vuex'
+import { useRoute } from 'vue-router'
+
+let drawer = ref(false)
+const menuList = [
+  {
+    icon: 'account_circle',
+    label: 'Профиль',
+    routeName: 'profile',
+    separator: true,
+  },
+  {
+    icon: 'feedback',
+    label: 'Уведомления',
+    routeName: 'notifications',
+    separator: false
+  },
+  {
+    icon: 'send',
+    label: 'Сообщения',
+    routeName: 'chats',
+    separator: false
+  },
+  {
+    icon: 'group',
+    label: 'Друзья',
+    routeName: 'friends',
+    separator: false
+  },
+  {
+    icon: 'diversity_3',
+    label: 'Сообщества',
+    routeName: 'communities',
+    separator: true
+  },
+  {
+    icon: 'settings',
+    label: 'Настройки',
+    routeName: 'settings',
+    separator: false
+  },
+  {
+    icon: 'help',
+    label: 'FAQ',
+    routeName: 'faq',
+    separator: true
+  },
+  {
+    icon: 'meeting_room',
+    label: 'Выйти',
+    routeName: 'logout',
+    separator: false,
+  },
+]
+
+let store = useStore()
+let route = useRoute()
+let activeMenuItemRouteName = ref('')
+let userAuthenticated = computed(() => store.getters['account/getUserAuthenticatedFlag'])
+
+
+function calculateActiveMenuItem(){
+  activeMenuItemRouteName.value = route.name
+}
+
+function changeActiveMenuItem(menuItem){
+  activeMenuItemRouteName.value = menuItem.routeName
+}
+
+function checkAuthorizationCookies(){
+  // Проверка есть ли в куках токены.
+  store.dispatch('account/getAuthorizationCookies')
+  .then((result)=>{
+    const token = result
+    if (token.access != null) {
+      store.commit('account/SET_ACCESS_TOKEN', {accessToken: token.access})
+      store.commit('account/SET_REFRESH_TOKEN', {refreshToken: token.refresh})
+      store.commit('account/SET_IS_AUTHENTICATED_FLAG', {isAuthenticated: true})
+    }
+    else {
+      if (!userAuthenticated.value){
+        store.dispatch('account/logout')
+      }
+    }
+  })
+}
+
+onMounted(()=>{
+  checkAuthorizationCookies()
+  calculateActiveMenuItem()
+})
+
+</script>
+
+<!-- <script>
 import { ref } from 'vue'
 import { defineComponent } from 'vue'
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters, mapMutations } from "vuex";
 
 const menuList = [
   {
@@ -117,6 +213,34 @@ export default defineComponent ({
       })
     },
     methods: {
+      ...mapActions( {
+        getAuthorizationCookies: 'account/getAuthorizationCookies',
+        logout: 'account/logout'
+      }),
+
+      ...mapMutations({
+        setAccessToken: 'account/SET_ACCESS_TOKEN',
+        setRefreshToken: 'account/SET_REFRESH_TOKEN',
+        setUserAuthenticatedFlag: 'account/SET_IS_AUTHENTICATED_FLAG',
+      }),
+
+      checkUserAuthorizated(){
+        // Проверка есть ли в куках токены.
+        this.getAuthorizationCookies().then((result)=>{
+          const token = result
+          if (token.access != null) {
+            this.setAccessToken(token.access)
+            this.setRefreshToken(token.refresh)
+            this.setUserAuthenticatedFlag(true)
+          }
+          else {
+            if (!this.userAuthenticated){
+              this.logout()
+            }
+          }
+        })
+      },
+
       calculateActiveMenuItem(){
         this.activeMenuItemRouteName = this.$route.name
         console.log(this.userAuthenticated)
@@ -128,9 +252,7 @@ export default defineComponent ({
     },
     mounted(){
       this.calculateActiveMenuItem()
-      if (!this.userAuthenticated){
-        this.$router.push({ name: 'authentication' })
-      }
+      this.checkUserAuthorizated()
     },
     setup() {
         return {
@@ -139,7 +261,7 @@ export default defineComponent ({
         };
     },
 })
-</script>
+</script> -->
 
 <style lang="scss" scoped>
 
